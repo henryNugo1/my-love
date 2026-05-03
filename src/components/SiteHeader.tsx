@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const links = [
   { label: "Home", id: "home" },
@@ -12,17 +12,9 @@ const links = [
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
 
   function goTo(id: string) {
-    if (location.pathname !== "/") {
-      navigate("/");
-      setTimeout(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    } else {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    }
+    navigate(`/#${id}`);
   }
 
   return (
@@ -65,9 +57,7 @@ export function SiteHeader() {
               <button
                 key={l.id}
                 onClick={() => {
-                  document
-                    .getElementById(l.id)
-                    ?.scrollIntoView({ behavior: "smooth" });
+                  navigate(`/#${l.id}`);
                   setOpen(false);
                 }}
                 className="text-sm uppercase tracking-[0.22em]"

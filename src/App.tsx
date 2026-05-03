@@ -12,12 +12,26 @@ import { Routes, Route } from "react-router-dom";
 import { PaintPage } from "./pages/PaintPage";
 import { useNavigate } from "react-router-dom";
 import { ProjectsPage } from "./pages/ProjectsPage";
-
-
-
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 function HomePage() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      const el = document.getElementById(id);
+
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      }
+    }
+  }, [location]);
   const navigate = useNavigate(); // ✅ MOVE IT HERE
+
   return (
     <main>
       {/* HERO IMAGE */}
@@ -270,11 +284,17 @@ function HomePage() {
             {/* RIGHT — STACKED VISUAL BLOCKS */}
             <div className="relative h-[500px]">
               <div className="absolute top-0 left-0 w-3/4 h-3/4 bg-neutral-200 overflow-hidden group">
-                <div className="w-full h-full bg-[url('/src/assets/images/francesca-tosolini-tHkJAMcO3QE-unsplash.jpg')] bg-cover bg-center transition duration-[1200ms] group-hover:scale-110" />
+                <img
+                  src={proj1}
+                  className="w-full h-full object-cover transition duration-[1200ms] group-hover:scale-110"
+                />
               </div>
 
               <div className="absolute bottom-0 right-0 w-2/3 h-2/3 bg-neutral-300 overflow-hidden group">
-                <div className="w-full h-full bg-[url('/src/assets/images/kam-idris-hYb7kbu4x7E-unsplash.jpg')] bg-cover bg-center transition duration-[1200ms] group-hover:scale-110" />
+                <img
+                  src={proj1}
+                  className="w-full h-full object-cover transition duration-[1200ms] group-hover:scale-110"
+                />
               </div>
 
               {/* FLOATING LABEL */}
