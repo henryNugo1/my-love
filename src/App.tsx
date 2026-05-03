@@ -47,7 +47,7 @@ function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
 
         {/* CONTENT */}
-        <div className="relative z-10 h-full flex items-end md:items-center px-6 md:px-12 pb-16 md:pb-0">
+        <div className="relative z-10 h-full flex items-center md:items-center px-6 md:px-12">
           {/* SAFE TEXT COLUMN */}
           <div className="w-full md:w-[55%] lg:w-[45%]">
             <div className="text-white">
@@ -57,7 +57,7 @@ function HomePage() {
               </p>
 
               {/* HEADING */}
-              <h1 className="mt-4 text-4xl md:text-6xl lg:text-6xl font-extralight leading-[1.1] tracking-tight">
+              <h1 className="mt-4 text-3xl sm:text-4xl md:text-6xl font-extralight leading-[1.15] tracking-tight">
                 Refined interiors,
                 <span className="block italic text-blue-400">
                   defined by material.
@@ -65,7 +65,7 @@ function HomePage() {
               </h1>
 
               {/* SUBTEXT */}
-              <p className="mt-5 text-base md:text-lg text-white/75 leading-relaxed max-w-lg">
+              <p className="mt-4 text-sm sm:text-base md:text-lg text-white/75 leading-relaxed max-w-md">
                 We design interiors and refine surfaces through carefully
                 selected materials, finishes, and custom mineral paints.
               </p>
@@ -285,7 +285,7 @@ function HomePage() {
             <div className="relative h-[500px]">
               <div className="absolute top-0 left-0 w-3/4 h-3/4 bg-neutral-200 overflow-hidden group">
                 <img
-                  src={proj1}
+                  src={proj5}
                   className="w-full h-full object-cover transition duration-[1200ms] group-hover:scale-110"
                 />
               </div>

@@ -25,5 +25,9 @@ body {
 }
 
 .animate-scroll-slow {
-  animation: scrollSlow 45s linear infinite;
+  animation: scrollSlow 5s linear infinite;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
 }
