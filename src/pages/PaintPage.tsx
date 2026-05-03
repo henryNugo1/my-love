@@ -9,7 +9,7 @@ import texture5 from "../assets/images/wood.jpg";
 import texture6 from "../assets/images/wood patern.jpg";
 
 // 👉 add your videos
-import vid1 from "../assets/videos/From KlickPin CF Save Practical DIY gift ideas for a polished look people will notice with enough variety to inspire your next creative step - Pin-1008806385297686190.mp4";
+import vid1 from "../assets/videos/ta3.mp4";
 import vid2 from "../assets/videos/ha1.mp4";
 import vid3 from "../assets/videos/ha2.mp4";
 

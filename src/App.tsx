@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import { ProjectsPage } from "./pages/ProjectsPage";
 
 
+
+
 function HomePage() {
   const navigate = useNavigate(); // ✅ MOVE IT HERE
   return (
