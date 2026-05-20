@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/images/logo.png";
 
 const links = [
   { label: "Home", id: "home" },
@@ -21,11 +22,30 @@ export function SiteHeader() {
   return (
     <>
       {/* HEADER */}
-      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-black/30 border-b border-white/10">
-        <div className="mx-auto max-w-[1400px] px-6 md:px-12 py-6 flex items-center justify-between">
+      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-black/50 border-[#C9A45C]/20">
+        <div className="mx-auto max-w-[1400px] px-6 md:px-12 py-4 flex items-center justify-between">
           {/* Logo */}
-          <div className="text-xl tracking-tight text-white">
-            Maren <span className="italic text-blue-500">&amp; Co.</span>
+          <div
+            onClick={() => goTo("home")}
+            className="cursor-pointer flex items-center gap-4"
+          >
+            {/* LOGO IMAGE */}
+            <img
+              src={logo}
+              alt="Sapphire & Beryl Logo"
+              className="h-14 md:h-16 w-auto object-contain"
+            />
+
+            {/* LOGO TEXT */}
+            <div className="hidden md:block">
+              <h1 className="text-[#C9A45C] text-lg tracking-[0.35em] uppercase leading-none">
+                Sapphire & Beryl
+              </h1>
+
+              <p className="mt-2 text-[10px] tracking-[0.25em] uppercase text-white/50">
+                Interior Design | Home Finishing | Paint Line
+              </p>
+            </div>
           </div>
 
           {/* Desktop Nav */}
@@ -34,7 +54,7 @@ export function SiteHeader() {
               <button
                 key={l.id}
                 onClick={() => goTo(l.id)}
-                className="text-[0.75rem] uppercase tracking-[0.25em] text-white/70 hover:text-white transition"
+                className="text-[0.75rem] uppercase tracking-[0.25em] text-white/70 hover:text-[#C9A45C] transition"
               >
                 {l.label}
               </button>
@@ -73,7 +93,7 @@ export function SiteHeader() {
         <div className="p-6">
           <button
             onClick={() => setOpen(false)}
-            className="flex items-center gap-2 text-white/70 hover:text-white transition"
+            className="flex items-center gap-2 text-white/70 hover:text-[#C9A45C] transition"
           >
             <span className="text-xl">←</span>
             <span className="text-xs tracking-[0.3em] uppercase">Back</span>
@@ -86,7 +106,7 @@ export function SiteHeader() {
             <button
               key={l.id}
               onClick={() => goTo(l.id)}
-              className="text-lg tracking-[0.3em] uppercase text-white/70 hover:text-white transition text-left"
+              className="text-lg tracking-[0.3em] uppercase text-white/70 hover:text-[#C9A45C] transition text-left"
             >
               {l.label}
             </button>

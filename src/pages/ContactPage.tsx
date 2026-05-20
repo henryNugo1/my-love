@@ -1,99 +1,87 @@
-import { useState } from "react";
+import { useForm } from "@formspree/react";
 
 export function ContactPage() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+  const [state, handleSubmit] = useForm("xqejayjr");
 
-  function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  }
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-
-    // for now just log (later we can connect email service)
-    console.log("Form submitted:", form);
-
-    alert("Message sent (demo)");
-    setForm({ name: "", email: "", message: "" });
+  if (state.succeeded) {
+    return (
+      <main className="pt-32 px-6 md:px-12 pb-24 bg-black text-white min-h-screen">
+        <h1 className="text-4xl md:text-5xl font-extralight text-[#C9A45C]">
+          Message Sent
+        </h1>
+        <p className="mt-4 text-white/70">
+          Thank you. We’ll get back to you shortly.
+        </p>
+      </main>
+    );
   }
 
   return (
-    <main className="pt-32 px-6 md:px-12">
-      {/* Header */}
+    <main className="pt-32 px-6 md:px-12 pb-24 bg-black text-white min-h-screen">
       <div className="max-w-2xl mb-12">
-        <h1 className="text-4xl md:text-5xl font-medium">Contact</h1>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">
-          Tell us about your project. We’ll get back to you with details and
-          next steps.
+        <p className="text-xs uppercase tracking-[0.3em] text-[#C9A45C] mb-4">
+          Contact
+        </p>
+
+        <h1 className="text-4xl md:text-5xl font-extralight">
+          Start your project
+        </h1>
+
+        <p className="mt-4 text-white/60">
+          Tell us about your space, your vision, or the finishing work you need.
         </p>
       </div>
 
-      {/* Layout */}
       <div className="grid md:grid-cols-2 gap-12">
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <input
             name="name"
-            value={form.name}
-            onChange={handleChange}
-            placeholder="Name"
-            className="w-full border border-gray-300 dark:border-gray-700 px-4 py-3 bg-transparent"
+            placeholder="Your name"
+            className="w-full bg-transparent border-b border-white/30 py-3 placeholder:text-white/40 focus:outline-none focus:border-[#C9A45C]"
             required
           />
 
           <input
             name="email"
-            value={form.email}
-            onChange={handleChange}
-            placeholder="Email"
             type="email"
-            className="w-full border border-gray-300 dark:border-gray-700 px-4 py-3 bg-transparent"
+            placeholder="Your email"
+            className="w-full bg-transparent border-b border-white/30 py-3 placeholder:text-white/40 focus:outline-none focus:border-[#C9A45C]"
             required
           />
 
           <textarea
             name="message"
-            value={form.message}
-            onChange={handleChange}
             placeholder="Tell us about your project..."
             rows={6}
-            className="w-full border border-gray-300 dark:border-gray-700 px-4 py-3 bg-transparent"
+            className="w-full bg-transparent border-b border-white/30 py-3 placeholder:text-white/40 focus:outline-none focus:border-[#C9A45C] resize-none"
             required
           />
 
           <button
             type="submit"
-            className="px-6 py-3 bg-blue-500 text-white hover:bg-blue-600 transition"
+            disabled={state.submitting}
+            className="px-6 py-3 bg-[#C9A45C] text-black hover:bg-[#b89145] transition disabled:opacity-60"
           >
-            Send Message
+            {state.submitting ? "Sending..." : "Send Message"}
           </button>
         </form>
 
-        {/* Info */}
-        <div className="text-gray-600 dark:text-gray-400 space-y-4 text-sm leading-relaxed">
+        <div className="text-white/60 space-y-5 text-sm leading-relaxed">
           <p>
-            We work on interior design, finishing, and custom paint
-            applications.
+            We work on interior design, home finishing, and premium paint
+            solutions.
           </p>
 
-          <p>Each project is handled personally from concept to completion.</p>
-
           <div className="pt-6">
-            <p className="font-medium text-black dark:text-white">Studio</p>
-            <p>14 Rue des Artisans</p>
-            <p>Antwerp, Belgium</p>
+            <p className="font-medium text-[#C9A45C]">Email</p>
+            <p>sapphireberyl12@gmail.com</p>
           </div>
 
           <div>
-            <p className="font-medium text-black dark:text-white">Contact</p>
-            <p>+32 3 555 0142</p>
-            <p>studio@maren.co</p>
+            <p className="font-medium text-[#C9A45C]">Services</p>
+            <p>Interior Design</p>
+            <p>Home Finishing</p>
+            <p>Paint Line</p>
           </div>
         </div>
       </div>
