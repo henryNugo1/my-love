@@ -8,7 +8,6 @@ import texture4 from "../assets/images/Cream.jpg";
 import texture5 from "../assets/images/wood.jpg";
 import texture6 from "../assets/images/wood patern.jpg";
 
-// 👉 add your videos
 import vid1 from "../assets/videos/ta3.mp4";
 import vid2 from "../assets/videos/ha1.mp4";
 import vid3 from "../assets/videos/ha2.mp4";
@@ -26,74 +25,89 @@ export function PaintPage() {
   const videos = [vid1, vid2, vid3];
 
   return (
-    <main className="pt-32 bg-[#f8f5f0] text-neutral-900">
+    <main className="pt-28 md:pt-32 bg-black text-white overflow-hidden">
       {/* HERO */}
-      <section className="px-6 md:px-12 py-24">
+      <section className="relative px-6 md:px-12 py-20 md:py-24 bg-black">
+        <div className="absolute inset-0 opacity-50 bg-[radial-gradient(circle_at_20%_20%,rgba(201,164,92,0.14),transparent_55%)]" />
+
         <Reveal>
-          <div className="max-w-3xl">
-            <p className="text-xs uppercase tracking-[0.3em] text-neutral-500 mb-4">
-              Surface Collection
+          <div className="max-w-3xl relative z-10">
+            <p className="text-xs uppercase tracking-[0.3em] text-[#C9A45C] mb-4">
+              Paint Line
             </p>
 
-            <h1 className="text-4xl md:text-6xl font-extralight leading-tight">
-              Mineral paint,
-              <span className="block italic text-neutral-600">
-                crafted by hand.
+            <h1 className="text-4xl md:text-6xl font-light leading-tight">
+              Premium paint,
+              <span className="block italic text-[#C9A45C]">
+                crafted for refined spaces.
               </span>
             </h1>
 
-            <p className="mt-6 text-neutral-600 max-w-xl">
-              A curated palette of mineral finishes designed to respond to
-              light, texture, and space.
+            <p className="mt-6 text-white/65 max-w-xl leading-relaxed">
+              A curated collection of elegant paint finishes designed to bring
+              depth, warmth, and lasting beauty into modern interiors.
             </p>
           </div>
         </Reveal>
       </section>
 
       {/* FEATURE IMAGE */}
-      <section className="px-6 md:px-12 pb-20">
+      <section className="px-6 md:px-12 pb-20 bg-black">
         <Reveal>
-          <div className="aspect-[16/9] overflow-hidden rounded-sm">
-            <img src={paintImg} className="w-full h-full object-cover" />
+          <div className="relative aspect-[16/9] overflow-hidden rounded-sm bg-neutral-900">
+            <img
+              src={paintImg}
+              alt="Premium paint finish"
+              className="w-full h-full object-cover"
+            />
+
+            <div className="absolute inset-0 bg-black/20" />
+            <div className="absolute inset-0 ring-1 ring-[#C9A45C]/20 pointer-events-none" />
+
+            <div className="absolute bottom-6 left-6 bg-black/75 text-[#C9A45C] backdrop-blur px-4 py-2 text-xs tracking-[0.25em] uppercase">
+              Sapphire & Beryl Paints
+            </div>
           </div>
         </Reveal>
       </section>
 
-      {/* TEXTURE PALETTE (🔥 PREMIUM SECTION) */}
-      <section className="px-6 md:px-12 py-28">
+      {/* TEXTURE PALETTE */}
+      <section className="px-6 md:px-12 py-20 md:py-28 bg-[#EDE4D7] text-black">
         <Reveal>
           <div className="max-w-2xl mb-16">
-            <h2 className="text-3xl md:text-4xl font-extralight mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] text-[#8A6A2F] mb-4">
+              Colour & Finish
+            </p>
+
+            <h2 className="text-3xl md:text-4xl font-light mb-4">
               Material Palette
             </h2>
 
-            <p className="text-neutral-600">
-              Each finish is developed through layered mineral application,
-              creating subtle variation and depth across every surface.
+            <p className="text-[#5E564B] leading-relaxed">
+              Each finish is selected to complement interior spaces with rich
+              tone, subtle texture, and a polished final appearance.
             </p>
           </div>
 
-          {/* PALETTE GRID */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-5 md:gap-6">
             {textures.map((t, i) => (
               <div
                 key={i}
-                className="group relative overflow-hidden rounded-sm cursor-pointer"
+                className="group relative overflow-hidden rounded-sm cursor-pointer bg-black shadow-sm transition duration-700 hover:-translate-y-2 hover:scale-[1.01]"
               >
-                {/* IMAGE */}
                 <div className="aspect-square overflow-hidden">
                   <img
                     src={t.img}
-                    className="w-full h-full object-cover transition duration-700 group-hover:scale-110"
+                    alt={t.name}
+                    className="w-full h-full object-cover transition duration-[1200ms] group-hover:scale-110"
                   />
                 </div>
 
-                {/* OVERLAY */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition duration-500" />
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/45 transition duration-500" />
+                <div className="absolute inset-0 ring-1 ring-[#8A6A2F]/20 pointer-events-none" />
 
-                {/* TEXT */}
                 <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition duration-500">
-                  <p className="text-xs uppercase tracking-widest text-white/70">
+                  <p className="text-xs uppercase tracking-widest text-[#C9A45C]">
                     {t.tone}
                   </p>
                   <h3 className="text-lg font-light">{t.name}</h3>
@@ -104,25 +118,32 @@ export function PaintPage() {
         </Reveal>
       </section>
 
-      {/* VIDEO SHOWCASE (🔥 replaces before/after) */}
-      <section className="px-6 md:px-12 py-32 bg-white">
+      {/* VIDEO SHOWCASE */}
+      <section className="px-6 md:px-12 py-20 md:py-32 bg-black text-white">
         <Reveal>
           <div className="max-w-2xl mb-16">
-            <h2 className="text-3xl md:text-4xl font-extralight mb-4">
+            <p className="text-xs uppercase tracking-[0.3em] text-[#C9A45C] mb-4">
               In Space
+            </p>
+
+            <h2 className="text-3xl md:text-4xl font-light mb-4">
+              Finishes that respond
+              <span className="block italic text-[#C9A45C]">
+                to light and movement.
+              </span>
             </h2>
 
-            <p className="text-neutral-600">
-              Real environments showcasing how finishes interact with light,
-              movement, and architecture.
+            <p className="text-white/65 leading-relaxed">
+              Real environments showcasing how premium finishes interact with
+              architecture, texture, and everyday living.
             </p>
           </div>
 
-          <div className="flex gap-6 overflow-x-auto pb-4">
+          <div className="grid md:grid-cols-3 gap-6">
             {videos.map((v, i) => (
               <div
                 key={i}
-                className="min-w-[240px] md:min-w-[280px] aspect-[9/16] overflow-hidden rounded-sm bg-black"
+                className="relative aspect-[4/5] overflow-hidden rounded-sm bg-neutral-900 group"
               >
                 <video
                   src={v}
@@ -130,8 +151,15 @@ export function PaintPage() {
                   loop
                   muted
                   playsInline
-                  className="w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover transition duration-[1200ms] group-hover:scale-105"
                 />
+
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition duration-500" />
+                <div className="absolute inset-0 ring-1 ring-[#C9A45C]/20 pointer-events-none" />
+
+                <div className="absolute bottom-5 left-5 text-xs tracking-[0.3em] uppercase text-white/75">
+                  Paint Finish
+                </div>
               </div>
             ))}
           </div>

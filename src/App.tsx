@@ -1,6 +1,7 @@
 import { SiteHeader } from "./components/SiteHeader";
 import { Reveal } from "./components/Reveal";
-import heroImage from "./assets/images/kam-idris-U39FPHKfDu0-unsplash.jpg";
+import heroImage from "./assets/images/build-craft-interiors-T3IG80KOLYQ-unsplash.jpg";
+import heroImage2 from "./assets/images/kam-idris-U39FPHKfDu0-unsplash.jpg";
 import proj1 from "./assets/images/francesca-tosolini-tHkJAMcO3QE-unsplash.jpg";
 import proj2 from "./assets/images/kam-idris-hYb7kbu4x7E-unsplash.jpg";
 import proj3 from "./assets/images/roberto-nickson-rEJxpBskj3Q-unsplash.jpg";
@@ -8,16 +9,43 @@ import proj4 from "./assets/images/florian-schmidinger-b_79nOqf95I-unsplash.jpg"
 import proj5 from "./assets/images/huy-nguyen-fQgYAnWVFeo-unsplash.jpg";
 import proj6 from "./assets/images/roberto-nickson-rEJxpBskj3Q-unsplash.jpg";
 import paintImg from "./assets/images/paint.jpg";
+import logo from "./assets/images/logo.png";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { PaintPage } from "./pages/PaintPage";
 import { ProjectsPage } from "./pages/ProjectsPage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "@formspree/react";
+
+const heroImages = [heroImage, heroImage2];
+const projectImages = [proj1, proj2, proj3, proj4, proj5, proj6];
+const loopingProjectImages = [...projectImages, ...projectImages];
+
+function ScrollToTop() {
+  const { pathname, hash } = useLocation();
+
+  useEffect(() => {
+    if (!hash) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [pathname, hash]);
+
+  return null;
+}
 
 function HomePage() {
   const location = useLocation();
   const navigate = useNavigate();
   const [state, handleSubmit] = useForm("xqejayjr");
+
+  const [heroIndex, setHeroIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setHeroIndex((prev) => (prev + 1) % heroImages.length);
+    }, 20000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     if (location.hash) {
@@ -36,42 +64,57 @@ function HomePage() {
     <main>
       {/* HERO */}
       <section id="home" className="relative h-screen w-full overflow-hidden">
-        <img
-          src={heroImage}
-          alt="Luxury interior design"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        <div className="absolute inset-0">
+          {heroImages.map((img, index) => (
+            <img
+              key={index}
+              src={img}
+              alt="Luxury interior design"
+              className={`absolute inset-0 w-full h-full object-cover transition-all duration-[1400ms] ease-in-out ${
+                index === heroIndex
+                  ? "opacity-100 translate-x-0"
+                  : "opacity-0 translate-x-8"
+              }`}
+            />
+          ))}
+        </div>
 
         <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/20" />
 
-        <div className="relative z-10 h-full flex items-center px-6 md:px-12">
+        <div className="relative z-10 h-full flex items-center px-6 md:px-12 pt-12 md:pt-0">
           <div className="w-full md:w-[55%] lg:w-[45%]">
             <div className="text-white">
-              <p className="text-xs uppercase tracking-[0.35em] text-[#C9A45C]">
+              <img
+                src={logo}
+                alt="Sapphire & Beryl Logo"
+                className="block md:hidden h-24 w-auto mb-6"
+              />
+
+              <p className="text-[12px] md:text-xs uppercase tracking-[0.22em] md:tracking-[0.35em] text-[#C9A45C]">
                 Interior Design • Home Finishing • Paint Line
               </p>
 
-              <h1 className="mt-4 text-3xl sm:text-4xl md:text-6xl font-extralight leading-[1.15] tracking-tight">
+              <h1 className="mt-4 text-[2.45rem] sm:text-5xl md:text-6xl font-light leading-[1.05] tracking-tight">
                 Refined interiors,
                 <span className="block italic text-[#C9A45C]">
                   finished with elegance.
                 </span>
               </h1>
 
-              <p className="mt-4 text-sm sm:text-base md:text-lg text-white/75 leading-relaxed max-w-md">
+              <p className="mt-4 text-[15px] md:text-lg text-white/80 leading-relaxed max-w-md">
                 We create elegant interiors, refined home finishes, and premium
                 paint solutions designed to bring beauty and comfort into every
                 space.
               </p>
 
-              <div className="mt-8 flex gap-4 flex-wrap">
+              <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <button
                   onClick={() =>
                     document
                       .getElementById("projects")
                       ?.scrollIntoView({ behavior: "smooth" })
                   }
-                  className="px-5 py-3 border border-white/60 text-white hover:border-[#C9A45C] hover:text-[#C9A45C] transition"
+                  className="px-5 py-3 border border-white/60 text-white hover:border-[#C9A45C] hover:text-[#C9A45C] transition w-full sm:w-auto text-center"
                 >
                   View Work
                 </button>
@@ -82,7 +125,7 @@ function HomePage() {
                       .getElementById("contact")
                       ?.scrollIntoView({ behavior: "smooth" })
                   }
-                  className="px-5 py-3 bg-[#C9A45C] text-black hover:bg-[#b89145] transition shadow-lg"
+                  className="px-5 py-3 bg-[#C9A45C] text-black hover:bg-[#b89145] transition shadow-lg w-full sm:w-auto text-center"
                 >
                   Start a Project
                 </button>
@@ -95,81 +138,65 @@ function HomePage() {
       {/* PROJECTS */}
       <section
         id="projects"
-        className="relative px-6 md:px-12 py-36 overflow-hidden bg-black text-white"
+        className="relative px-6 md:px-12 py-24 md:py-36 overflow-hidden bg-black text-white"
       >
         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_30%_20%,rgba(201,164,92,0.12),transparent_60%)]" />
 
-        <Reveal>
-          <div className="max-w-2xl mb-20 relative z-10">
-            <p className="text-xs uppercase tracking-[0.3em] text-[#C9A45C] mb-4">
-              Selected Work
-            </p>
+        <div className="max-w-2xl mb-16 md:mb-20 relative z-10">
+          <p className="text-xs uppercase tracking-[0.3em] text-[#C9A45C] mb-4">
+            Selected Work
+          </p>
 
-            <h2 className="text-4xl md:text-5xl font-extralight mb-6">
-              Projects
-            </h2>
+          <h2 className="text-4xl md:text-5xl font-light mb-6">Projects</h2>
 
-            <p className="text-white/70 leading-relaxed">
-              A curated selection of interiors, finishes, and material-driven
-              spaces where light, texture, and craftsmanship define each
-              environment.
-            </p>
+          <p className="text-white/70 leading-relaxed">
+            A curated selection of interiors, finishes, and material-driven
+            spaces where light, texture, and craftsmanship define each
+            environment.
+          </p>
+        </div>
+
+        <div className="relative w-full overflow-hidden">
+          <div className="pointer-events-none absolute left-0 top-0 h-full w-20 md:w-32 bg-gradient-to-r from-black to-transparent z-10" />
+          <div className="pointer-events-none absolute right-0 top-0 h-full w-20 md:w-32 bg-gradient-to-l from-black to-transparent z-10" />
+
+          <div className="flex gap-8 animate-scroll-slow">
+            {loopingProjectImages.map((img, i) => (
+              <div
+                key={i}
+                className="shrink-0 w-[260px] md:w-[340px] aspect-[4/5] overflow-hidden rounded-sm relative group bg-neutral-900"
+              >
+                <img
+                  src={img}
+                  alt="Interior project"
+                  className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
+                />
+
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition duration-500" />
+                <div className="absolute inset-0 ring-1 ring-[#C9A45C]/10 pointer-events-none" />
+              </div>
+            ))}
           </div>
+        </div>
 
-          <div className="relative w-full overflow-hidden">
-            <div className="pointer-events-none absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-black to-transparent z-10" />
-            <div className="pointer-events-none absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-black to-transparent z-10" />
-
-            <div className="flex gap-8 animate-scroll-slow">
-              {[
-                proj1,
-                proj2,
-                proj3,
-                proj4,
-                proj5,
-                proj6,
-                proj1,
-                proj2,
-                proj3,
-                proj4,
-                proj5,
-                proj6,
-              ].map((img, i) => (
-                <div
-                  key={i}
-                  className="min-w-[280px] md:min-w-[340px] aspect-[4/5] overflow-hidden rounded-sm relative group"
-                >
-                  <img
-                    src={img}
-                    alt="Interior project"
-                    className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
-                  />
-
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition duration-500" />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-16 text-center">
-            <button
-              onClick={() => navigate("/projects")}
-              className="group relative inline-flex items-center gap-3 px-8 py-4 border border-[#C9A45C]/50 text-[#C9A45C] uppercase tracking-widest text-xs hover:border-[#C9A45C] transition"
-            >
-              <span>View Projects</span>
-              <span className="transform transition group-hover:translate-x-2">
-                →
-              </span>
-              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#C9A45C] group-hover:w-full transition-all duration-500"></span>
-            </button>
-          </div>
-        </Reveal>
+        <div className="mt-16 text-center relative z-10">
+          <button
+            onClick={() => navigate("/projects")}
+            className="group relative inline-flex items-center gap-3 px-8 py-4 border border-[#C9A45C]/50 text-[#C9A45C] uppercase tracking-widest text-xs hover:border-[#C9A45C] transition"
+          >
+            <span>View Projects</span>
+            <span className="transform transition group-hover:translate-x-2">
+              →
+            </span>
+            <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#C9A45C] group-hover:w-full transition-all duration-500"></span>
+          </button>
+        </div>
       </section>
 
       {/* PAINT */}
       <section
         id="paint"
-        className="relative px-6 md:px-12 py-36 bg-[#F6F1EA] overflow-hidden"
+        className="relative px-6 md:px-12 py-24 md:py-36 bg-[#F6F1EA] overflow-hidden"
       >
         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_70%_30%,rgba(201,164,92,0.18),transparent_60%)]" />
 
@@ -194,7 +221,7 @@ function HomePage() {
                 Paint Line
               </p>
 
-              <h2 className="text-4xl md:text-5xl font-extralight mb-6 leading-tight text-black">
+              <h2 className="text-4xl md:text-5xl font-light mb-6 leading-tight text-black">
                 Premium Paint,
                 <span className="block italic text-[#8A6A2F]">
                   made for refined spaces.
@@ -227,7 +254,7 @@ function HomePage() {
       {/* ABOUT */}
       <section
         id="about"
-        className="relative px-6 md:px-12 py-40 bg-white overflow-hidden"
+        className="relative px-6 md:px-12 py-24 md:py-40 bg-white overflow-hidden"
       >
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#C9A45C]/10 rounded-full blur-3xl opacity-40 animate-pulse" />
@@ -241,7 +268,7 @@ function HomePage() {
                 The Studio
               </p>
 
-              <h2 className="text-4xl md:text-5xl font-extralight leading-tight mb-8 text-black">
+              <h2 className="text-4xl md:text-5xl font-light leading-tight mb-8 text-black">
                 Built on beauty,
                 <span className="block italic text-[#8A6A2F]">
                   refined through detail.
@@ -260,7 +287,7 @@ function HomePage() {
               </p>
             </div>
 
-            <div className="relative h-[500px]">
+            <div className="relative h-[420px] md:h-[500px]">
               <div className="absolute top-0 left-0 w-3/4 h-3/4 bg-neutral-200 overflow-hidden group">
                 <img
                   src={proj5}
@@ -286,7 +313,10 @@ function HomePage() {
       </section>
 
       {/* CONTACT */}
-      <section id="contact" className="px-6 md:px-12 py-40 bg-black text-white">
+      <section
+        id="contact"
+        className="px-6 md:px-12 py-24 md:py-40 bg-black text-white"
+      >
         <Reveal>
           <div className="grid md:grid-cols-2 gap-20">
             <div>
@@ -294,7 +324,7 @@ function HomePage() {
                 Start a Project
               </p>
 
-              <h2 className="text-4xl md:text-5xl font-extralight leading-tight mb-8">
+              <h2 className="text-4xl md:text-5xl font-light leading-tight mb-8">
                 Let’s create something
                 <span className="block italic text-[#C9A45C]">
                   worth experiencing.
@@ -309,7 +339,7 @@ function HomePage() {
 
               <div className="space-y-4 text-sm text-white/60">
                 <p>sapphireberyl12@gmail.com</p>
-                <p>Phone / WhatsApp number coming soon</p>
+                <p>+2348039443920</p>
               </div>
             </div>
 
@@ -358,7 +388,7 @@ function HomePage() {
 
       {/* WHATSAPP BUTTON */}
       <a
-        href="https://wa.me/1234567890"
+        href="https://wa.me/2348039443920"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-50 group"
@@ -377,6 +407,7 @@ export default function App() {
   return (
     <>
       <SiteHeader />
+      <ScrollToTop />
 
       <Routes>
         <Route path="/" element={<HomePage />} />
