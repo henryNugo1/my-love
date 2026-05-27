@@ -59,13 +59,6 @@ body {
   animation: marquee 28s linear infinite;
 }
 
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
-
-.animate-scroll-slow:hover {
-  animation-play-state: paused;
-}
 
 /* Scrollbar */
 ::-webkit-scrollbar {
@@ -83,4 +76,50 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #b89145;
+}
+
+.project-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.project-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.project-scroll {
+  scrollbar-width: none;
+}
+
+.project-scroll:active .animate-scroll-slow,
+.project-scroll:hover .animate-scroll-slow,
+
+.motion-paused {
+  animation-play-state: paused !important;
+}
+
+.ripple-effect {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(201, 164, 92, 0.9);
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 30;
+  animation: rippleWave 900ms ease-out forwards;
+}
+
+@keyframes rippleWave {
+  0% {
+    width: 18px;
+    height: 18px;
+    opacity: 0.9;
+  }
+
+  100% {
+    width: 260px;
+    height: 260px;
+    opacity: 0;
+  }
 }

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Reveal } from "../components/Reveal";
 
 // Existing motion videos — leave these as they are
@@ -74,6 +75,44 @@ const projectVideos = [
 ];
 
 export function ProjectsPage() {
+  const [focusedMotionIndex, setFocusedMotionIndex] = useState<number | null>(
+    null,
+  );
+
+  const [selectedProject, setSelectedProject] = useState<
+    (typeof projectVideos)[number] | null
+  >(null);
+
+  const [ripple, setRipple] = useState<{
+    index: number;
+    x: number;
+    y: number;
+    id: number;
+  } | null>(null);
+
+  function handleMotionClick(
+    e: React.MouseEvent<HTMLDivElement>,
+    index: number,
+  ) {
+    e.stopPropagation();
+
+    if (focusedMotionIndex === index) {
+      setFocusedMotionIndex(null);
+      setRipple(null);
+      return;
+    }
+
+    const rect = e.currentTarget.getBoundingClientRect();
+
+    setFocusedMotionIndex(index);
+    setRipple({
+      index,
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      id: Date.now(),
+    });
+  }
+
   return (
     <main className="pt-28 md:pt-32 bg-black text-white overflow-hidden">
       {/* HERO */}
@@ -102,7 +141,13 @@ export function ProjectsPage() {
       </section>
 
       {/* EXISTING MOTION VIDEOS */}
-      <section className="px-6 md:px-12 py-16 md:py-24 bg-black">
+      <section
+        onClick={() => {
+          setFocusedMotionIndex(null);
+          setRipple(null);
+        }}
+        className="px-6 md:px-12 py-16 md:py-24 bg-black"
+      >
         <Reveal>
           <div className="mb-12 max-w-2xl">
             <p className="text-xs uppercase tracking-[0.3em] text-[#C9A45C] mb-4">
@@ -121,11 +166,20 @@ export function ProjectsPage() {
             <div className="pointer-events-none absolute left-0 top-0 h-full w-20 bg-gradient-to-r from-black to-transparent z-10" />
             <div className="pointer-events-none absolute right-0 top-0 h-full w-20 bg-gradient-to-l from-black to-transparent z-10" />
 
-            <div className="flex gap-6 animate-marquee">
+            <div
+              className={`flex gap-6 animate-marquee ${
+                focusedMotionIndex !== null ? "motion-paused" : ""
+              }`}
+            >
               {loopingVideos.map((v, i) => (
                 <div
                   key={i}
-                  className="relative min-w-[260px] md:min-w-[320px] aspect-[4/5] overflow-hidden bg-neutral-900 group cursor-pointer rounded-sm"
+                  onClick={(e) => handleMotionClick(e, i)}
+                  className={`relative min-w-[260px] md:min-w-[320px] aspect-[4/5] overflow-hidden bg-neutral-900 group cursor-pointer rounded-sm transition duration-500 ${
+                    focusedMotionIndex === i
+                      ? "scale-[1.03] ring-1 ring-[#C9A45C]/60 z-20"
+                      : ""
+                  }`}
                 >
                   <video
                     src={v.src}
@@ -133,11 +187,22 @@ export function ProjectsPage() {
                     muted
                     loop
                     playsInline
+                    preload="metadata"
                     className="absolute inset-0 w-full h-full object-cover transition duration-[1200ms] ease-out group-hover:scale-105"
                   />
 
                   <div className="absolute inset-0 bg-black/25 group-hover:bg-black/45 transition duration-500" />
                   <div className="absolute inset-0 ring-1 ring-[#C9A45C]/20 pointer-events-none" />
+                  {ripple?.index === i && (
+                    <span
+                      key={ripple.id}
+                      className="ripple-effect"
+                      style={{
+                        left: ripple.x,
+                        top: ripple.y,
+                      }}
+                    />
+                  )}
 
                   <div className="absolute bottom-5 left-5 text-xs tracking-[0.3em] uppercase text-white/75">
                     {v.title}
@@ -180,13 +245,17 @@ export function ProjectsPage() {
                 }`}
               >
                 {/* VIDEO */}
-                <div className="relative aspect-[4/5] max-w-[320px] overflow-hidden rounded-sm bg-black group">
+                <div
+                  onClick={() => setSelectedProject(project)}
+                  className="relative aspect-[4/5] max-w-[320px] overflow-hidden rounded-sm bg-black group cursor-pointer"
+                >
                   <video
                     src={project.src}
                     autoPlay
                     muted
                     loop
                     playsInline
+                    preload="metadata"
                     className="absolute inset-0 w-full h-full object-cover transition duration-[1200ms] group-hover:scale-105"
                   />
 
@@ -219,6 +288,47 @@ export function ProjectsPage() {
           ))}
         </div>
       </section>
+      {selectedProject && (
+        <div
+          onClick={() => setSelectedProject(null)}
+          className="fixed inset-0 z-[999] bg-black/90 backdrop-blur-md flex items-center justify-center px-4"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-5xl pt-16 md:pt-0"
+          >
+            <video
+              src={selectedProject.src}
+              controls
+              autoPlay
+              playsInline
+              preload="metadata"
+              className="w-full max-h-[80vh] bg-black object-contain rounded-sm"
+            />
+
+            <div className="mt-5 text-white">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.3em] text-[#C9A45C] mb-2">
+                    {selectedProject.label}
+                  </p>
+
+                  <h3 className="text-2xl md:text-4xl font-light">
+                    {selectedProject.title}
+                  </h3>
+                </div>
+
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="shrink-0 bg-white/5 backdrop-blur-md border border-white/10 px-5 py-3 rounded-full text-white/80 hover:text-[#C9A45C] hover:border-[#C9A45C]/40 transition text-[10px] md:text-[11px] tracking-[0.28em] uppercase"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
