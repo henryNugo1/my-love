@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Reveal } from "../components/Reveal";
 
 // Existing motion videos — leave these as they are
@@ -14,6 +14,15 @@ import projectVid4 from "../assets/videos/The Modern Haven.mp4";
 import projectVid5 from "../assets/videos/The Future Kitchen.mp4";
 import projectVid6 from "../assets/videos/The Calm Retreat.mp4";
 import projectVid7 from "../assets/videos/The Creative Lounge.mp4";
+import bedFitVid1 from "../assets/videos/bed-fitting-1.mp4";
+import bedFitVid2 from "../assets/videos/bed-fitting-2.mp4";
+import bedFitVid3 from "../assets/videos/bed-fitting-3.mp4";
+type ProjectItem = {
+  src: string;
+  label: string;
+  title: string;
+  desc: string;
+};
 
 const motionVideos = [
   { src: vid1, title: "Material Study I" },
@@ -23,7 +32,7 @@ const motionVideos = [
 
 const loopingVideos = [...motionVideos, ...motionVideos];
 
-const projectVideos = [
+const projectVideos: ProjectItem[] = [
   {
     src: projectVid1,
     label: "Project 01",
@@ -74,14 +83,45 @@ const projectVideos = [
   },
 ];
 
+const bedFittingVideos: ProjectItem[] = [
+  {
+    src: bedFitVid1,
+    label: "Signature Bed 01",
+    title: "Elegant Bed Design",
+    desc: "A custom bed design with soft finishes, warm lighting, and carefully crafted details that bring comfort and style to the bedroom.",
+  },
+  {
+    src: bedFitVid2,
+    label: "Signature Bed 02",
+    title: "Luxury Bed Fitting",
+    desc: "A beautifully fitted bed created with quality materials and clean craftsmanship, giving the space a calm and premium feel.",
+  },
+  {
+    src: bedFitVid3,
+    label: "Signature Bed 03",
+    title: "Modern Bedroom Feature",
+    desc: "A bespoke bed installation designed to blend comfort and elegance, adding a timeless touch to the overall bedroom design.",
+  },
+];
+
 export function ProjectsPage() {
   const [focusedMotionIndex, setFocusedMotionIndex] = useState<number | null>(
     null,
   );
 
-  const [selectedProject, setSelectedProject] = useState<
-    (typeof projectVideos)[number] | null
-  >(null);
+  const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(
+    null,
+  );
+
+  useEffect(() => {
+    if (!selectedProject) return;
+
+    document.body.classList.add("modal-open");
+
+    return () => {
+      document.body.classList.remove("modal-open");
+    };
+  }, [selectedProject]);
 
   const [ripple, setRipple] = useState<{
     index: number;
@@ -288,14 +328,85 @@ export function ProjectsPage() {
           ))}
         </div>
       </section>
+
+      {/* BED FITTING PROJECTS */}
+      <section className="relative px-6 md:px-12 py-20 md:py-32 bg-black text-white overflow-hidden">
+        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_75%_25%,rgba(201,164,92,0.13),transparent_55%)]" />
+
+        <Reveal>
+          <div className="relative z-10 max-w-3xl mb-16">
+            <div className="flex items-center gap-4 mb-5">
+              <span className="text-[#C9A45C] text-xs tracking-[0.35em] uppercase">
+                02
+              </span>
+              <span className="h-px w-16 bg-[#C9A45C]/50" />
+              <p className="text-xs uppercase tracking-[0.3em] text-[#C9A45C]">
+                Bed Fitting
+              </p>
+            </div>
+
+            <h2 className="text-3xl md:text-5xl font-light leading-tight">
+              Bedroom fittings,
+              <span className="block italic text-[#C9A45C]">
+                finished with detail.
+              </span>
+            </h2>
+
+            <p className="mt-6 text-white/65 leading-relaxed max-w-2xl">
+              Clean bed installation, careful alignment, and refined bedroom
+              finishing for spaces that feel calm, complete, and well put
+              together.
+            </p>
+          </div>
+        </Reveal>
+
+        <div className="relative z-10 grid md:grid-cols-3 gap-6">
+          {bedFittingVideos.map((project, index) => (
+            <Reveal key={index}>
+              <div
+                onClick={() => setSelectedProject(project)}
+                className="relative aspect-[4/5] overflow-hidden rounded-sm bg-neutral-900 group cursor-pointer border border-white/10 hover:border-[#C9A45C]/40 transition duration-500"
+              >
+                <video
+                  src={project.src}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  className="absolute inset-0 w-full h-full object-cover transition duration-[1200ms] group-hover:scale-105"
+                />
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute inset-0 ring-1 ring-[#C9A45C]/10 pointer-events-none" />
+
+                <div className="absolute top-5 left-5 text-[10px] tracking-[0.3em] uppercase text-[#C9A45C]">
+                  0{index + 1}
+                </div>
+
+                <div className="absolute bottom-5 left-5 right-5">
+                  <h3 className="text-xl font-light text-white">
+                    {project.title}
+                  </h3>
+
+                  <p className="mt-3 text-sm text-white/55 leading-relaxed opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition duration-500">
+                    {project.desc}
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
       {selectedProject && (
         <div
           onClick={() => setSelectedProject(null)}
-          className="fixed inset-0 z-[999] bg-black/90 backdrop-blur-md flex items-center justify-center px-4"
+          className="fixed inset-0 z-[999] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center px-4 py-6 overflow-hidden"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-5xl pt-16 md:pt-0"
+            className="w-full max-w-5xl h-full flex flex-col items-center justify-center"
           >
             <video
               src={selectedProject.src}
@@ -303,10 +414,10 @@ export function ProjectsPage() {
               autoPlay
               playsInline
               preload="metadata"
-              className="w-full max-h-[80vh] bg-black object-contain rounded-sm"
+              className="w-full h-auto max-h-[70vh] bg-black object-contain rounded-sm"
             />
 
-            <div className="mt-5 text-white">
+            <div className="mt-4 w-full text-white">
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="text-xs uppercase tracking-[0.3em] text-[#C9A45C] mb-2">

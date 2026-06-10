@@ -1,5 +1,9 @@
+import { useEffect, useRef, useState } from "react";
 import { Reveal } from "../components/Reveal";
-import paintImg from "../assets/images/paint.jpg";
+import bucket1 from "../assets/images/orange.webp";
+import bucket2 from "../assets/images/green.webp";
+import bucket3 from "../assets/images/brown.webp";
+import bucket4 from "../assets/images/blue.webp";
 
 import texture1 from "../assets/images/black.jpg";
 import texture2 from "../assets/images/Blue.jpg";
@@ -8,11 +12,53 @@ import texture4 from "../assets/images/Cream.jpg";
 import texture5 from "../assets/images/wood.jpg";
 import texture6 from "../assets/images/wood patern.jpg";
 
-import vid1 from "../assets/videos/ta3.mp4";
-import vid2 from "../assets/videos/ha1.mp4";
-import vid3 from "../assets/videos/ha2.mp4";
+import paint1 from "../assets/videos/paint-1.mp4";
+import paint2 from "../assets/videos/paint-2.mp4";
+import paint3 from "../assets/videos/paint-3.mp4";
+import paint4 from "../assets/videos/paint-4.mp4";
+import paint5 from "../assets/videos/paint-5.mp4";
 
 export function PaintPage() {
+  const bucketSectionRef = useRef<HTMLElement | null>(null);
+  const [bucketsVisible, setBucketsVisible] = useState(false);
+  const [selectedPaintProject, setSelectedPaintProject] = useState<{
+    src: string;
+    title: string;
+    desc: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!selectedPaintProject) return;
+
+    document.body.classList.add("modal-open");
+
+    return () => {
+      document.body.classList.remove("modal-open");
+    };
+  }, [selectedPaintProject]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setBucketsVisible(true);
+        }
+      },
+      { threshold: 0.35 },
+    );
+
+    if (bucketSectionRef.current) {
+      observer.observe(bucketSectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+  const paintBuckets = [
+    { img: bucket1, name: "Eggshell Finish" },
+    { img: bucket2, name: "Emulsion Paint" },
+    { img: bucket3, name: "Matt Finish" },
+    { img: bucket4, name: "Satin Finish" },
+  ];
   const textures = [
     { img: texture1, name: "Obsidian", tone: "Deep Matte" },
     { img: texture2, name: "Azure", tone: "Mineral Blue" },
@@ -22,7 +68,33 @@ export function PaintPage() {
     { img: texture6, name: "Raw Grain", tone: "Textured Pattern" },
   ];
 
-  const videos = [vid1, vid2, vid3];
+  const paintProjects = [
+    {
+      src: paint1,
+      title: "Exterior Paint Renewal",
+      desc: "A clean exterior repaint focused on fresh colour, smooth coverage, and a neat lasting finish for the building.",
+    },
+    {
+      src: paint2,
+      title: "Outdoor Wall Finish",
+      desc: "A careful exterior painting project designed to improve the look of the property with even application and strong surface coverage.",
+    },
+    {
+      src: paint3,
+      title: "Facade Painting",
+      desc: "A refined exterior finish that gives the building a cleaner, brighter, and more complete appearance.",
+    },
+    {
+      src: paint4,
+      title: "Building Paint Upgrade",
+      desc: "A professional paint application created to refresh the exterior and give the property a polished finish.",
+    },
+    {
+      src: paint5,
+      title: "Exterior Colour Finish",
+      desc: "A smooth exterior coating project showing clean workmanship, balanced colour, and durable paint coverage.",
+    },
+  ];
 
   return (
     <main className="pt-28 md:pt-32 bg-black text-white overflow-hidden">
@@ -33,39 +105,52 @@ export function PaintPage() {
         <Reveal>
           <div className="max-w-3xl relative z-10">
             <p className="text-xs uppercase tracking-[0.3em] text-[#C9A45C] mb-4">
-              Paint Line
+              Patreon Paint
             </p>
 
             <h1 className="text-4xl md:text-6xl font-light leading-tight">
-              Premium paint,
-              <span className="block italic text-[#C9A45C]">
-                crafted for refined spaces.
-              </span>
+              Coat Once,
+              <span className="block italic text-[#C9A45C]">Stains Twice.</span>
             </h1>
 
             <p className="mt-6 text-white/65 max-w-xl leading-relaxed">
-              A curated collection of elegant paint finishes designed to bring
-              depth, warmth, and lasting beauty into modern interiors.
+              Patreon Paint offers smooth coverage, rich colour, and durable
+              finishes for interior and exterior spaces.
             </p>
           </div>
         </Reveal>
       </section>
 
-      {/* FEATURE IMAGE */}
-      <section className="px-6 md:px-12 pb-20 bg-black">
+      {/* PAINT BUCKET SHOWCASE */}
+      <section ref={bucketSectionRef} className="px-6 md:px-12 pb-20 bg-black">
         <Reveal>
-          <div className="relative aspect-[16/9] overflow-hidden rounded-sm bg-neutral-900">
-            <img
-              src={paintImg}
-              alt="Premium paint finish"
-              className="w-full h-full object-cover"
-            />
+          <div className="relative overflow-hidden rounded-sm bg-[#F6F1EA] px-6 py-12 md:px-12 md:py-16">
+            <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_70%_30%,rgba(201,164,92,0.18),transparent_60%)]" />
 
-            <div className="absolute inset-0 bg-black/20" />
-            <div className="absolute inset-0 ring-1 ring-[#C9A45C]/20 pointer-events-none" />
+            <div className="relative grid grid-cols-2 md:grid-cols-4 gap-8 items-end">
+              {paintBuckets.map((bucket, index) => (
+                <div
+                  key={bucket.name}
+                  className={`group flex flex-col items-center ${
+                    bucketsVisible
+                      ? "paint-bucket-row-slide"
+                      : "opacity-0 translate-x-24"
+                  }`}
+                  style={{
+                    animationDelay: `${Math.floor(index / 2) * 350}ms`,
+                  }}
+                >
+                  <img
+                    src={bucket.img}
+                    alt={`${bucket.name} paint bucket`}
+                    className="w-full max-w-[170px] md:max-w-[220px] object-contain drop-shadow-[0_25px_35px_rgba(0,0,0,0.35)] transition duration-700 group-hover:scale-105"
+                  />
 
-            <div className="absolute bottom-6 left-6 bg-black/75 text-[#C9A45C] backdrop-blur px-4 py-2 text-xs tracking-[0.25em] uppercase">
-              Sapphire & Beryl Paints
+                  <p className="mt-5 text-xs uppercase tracking-[0.25em] text-[#8A6A2F]">
+                    {bucket.name}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </Reveal>
@@ -89,11 +174,11 @@ export function PaintPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-5 md:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-6">
             {textures.map((t, i) => (
               <div
                 key={i}
-                className="group relative overflow-hidden rounded-sm cursor-pointer bg-black shadow-sm transition duration-700 hover:-translate-y-2 hover:scale-[1.01]"
+                className="premium-card group relative overflow-hidden rounded-sm cursor-pointer bg-black shadow-sm transition duration-700 hover:-translate-y-2 hover:scale-[1.01]"
               >
                 <div className="aspect-square overflow-hidden">
                   <img
@@ -114,57 +199,126 @@ export function PaintPage() {
                 </div>
               </div>
             ))}
+            <div className="premium-card relative overflow-hidden rounded-sm bg-black min-h-[220px] md:min-h-[260px] flex flex-col items-center justify-center text-center px-6">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(201,164,92,0.22),transparent_60%)]" />
+
+              <p className="relative text-5xl font-light text-[#C9A45C]">+</p>
+
+              <h3 className="relative mt-4 text-lg font-light text-white">
+                And Many More
+              </h3>
+
+              <p className="relative mt-3 text-xs leading-relaxed text-white/55">
+                More colours, textures, and finishes are available for different
+                spaces.
+              </p>
+            </div>
           </div>
         </Reveal>
       </section>
+      {/* PAINT PROJECTS */}
+      <section className="relative px-6 md:px-12 py-20 md:py-28 bg-black text-white overflow-hidden">
+        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_20%_20%,rgba(201,164,92,0.12),transparent_55%)]" />
 
-      {/* VIDEO SHOWCASE */}
-      <section className="px-6 md:px-12 py-20 md:py-32 bg-black text-white">
         <Reveal>
-          <div className="max-w-2xl mb-16">
+          <div className="relative z-10 max-w-3xl mb-14">
             <p className="text-xs uppercase tracking-[0.3em] text-[#C9A45C] mb-4">
-              In Space
+              Exterior Projects
             </p>
 
-            <h2 className="text-3xl md:text-4xl font-light mb-4">
-              Finishes that respond
+            <h2 className="text-3xl md:text-5xl font-light leading-tight">
+              Exterior painting,
               <span className="block italic text-[#C9A45C]">
-                to light and movement.
+                finished with precision.
               </span>
             </h2>
 
-            <p className="text-white/65 leading-relaxed">
-              Real environments showcasing how premium finishes interact with
-              architecture, texture, and everyday living.
+            <p className="mt-5 text-white/65 leading-relaxed max-w-2xl">
+              Real exterior painting projects showing clean application, smooth
+              coverage, and durable finishes with Patreon Paint.
             </p>
           </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {videos.map((v, i) => (
-              <div
-                key={i}
-                className="relative aspect-[4/5] overflow-hidden rounded-sm bg-neutral-900 group"
-              >
-                <video
-                  src={v}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="absolute inset-0 w-full h-full object-cover transition duration-[1200ms] group-hover:scale-105"
-                />
-
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition duration-500" />
-                <div className="absolute inset-0 ring-1 ring-[#C9A45C]/20 pointer-events-none" />
-
-                <div className="absolute bottom-5 left-5 text-xs tracking-[0.3em] uppercase text-white/75">
-                  Paint Finish
-                </div>
-              </div>
-            ))}
-          </div>
         </Reveal>
+
+        <div className="relative z-10 grid sm:grid-cols-2 lg:grid-cols-5 gap-5 md:gap-6">
+          {paintProjects.map((project, index) => (
+            <Reveal key={index}>
+              <button
+                onClick={() => setSelectedPaintProject(project)}
+                className="group text-left w-full"
+              >
+                <div className="relative aspect-[9/16] overflow-hidden rounded-sm bg-neutral-950">
+                  <video
+                    src={project.src}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    className="absolute inset-0 w-full h-full object-contain bg-black transition duration-[1200ms] group-hover:scale-[1.03]"
+                  />
+
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition duration-500" />
+                  <div className="absolute inset-0 ring-1 ring-[#C9A45C]/20 pointer-events-none" />
+
+                  <div className="absolute top-4 left-4 text-[10px] uppercase tracking-[0.25em] text-[#C9A45C]">
+                    0{index + 1}
+                  </div>
+                </div>
+
+                <div className="mt-4">
+                  <h3 className="text-lg font-light text-white group-hover:text-[#C9A45C] transition">
+                    {project.title}
+                  </h3>
+
+                  <p className="mt-2 text-sm text-white/55 leading-relaxed">
+                    {project.desc}
+                  </p>
+                </div>
+              </button>
+            </Reveal>
+          ))}
+        </div>
       </section>
+      {selectedPaintProject && (
+        <div
+          onClick={() => setSelectedPaintProject(null)}
+          className="fixed inset-0 z-[999] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center px-4 py-6 overflow-hidden"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-4xl h-full flex flex-col items-center justify-center"
+          >
+            <video
+              src={selectedPaintProject.src}
+              controls
+              autoPlay
+              playsInline
+              preload="metadata"
+              className="w-full h-auto max-h-[70vh] bg-black object-contain rounded-sm"
+            />
+
+            <div className="mt-4 w-full flex items-center justify-between gap-4 text-white">
+              {" "}
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-[#C9A45C] mb-2">
+                  Exterior Project
+                </p>
+
+                <h3 className="text-2xl md:text-4xl font-light">
+                  {selectedPaintProject.title}
+                </h3>
+              </div>
+              <button
+                onClick={() => setSelectedPaintProject(null)}
+                className="shrink-0 bg-white/5 border border-white/10 px-5 py-3 rounded-full text-white/80 hover:text-[#C9A45C] hover:border-[#C9A45C]/40 transition text-[10px] tracking-[0.28em] uppercase"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

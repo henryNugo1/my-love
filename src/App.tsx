@@ -1,43 +1,102 @@
 import { SiteHeader } from "./components/SiteHeader";
 import { Reveal } from "./components/Reveal";
-import heroImage from "./assets/images/build-craft-interiors-T3IG80KOLYQ-unsplash.jpg";
-import heroImage2 from "./assets/images/kam-idris-U39FPHKfDu0-unsplash.jpg";
-import proj1 from "./assets/images/francesca-tosolini-tHkJAMcO3QE-unsplash.jpg";
-import proj2 from "./assets/images/kam-idris-hYb7kbu4x7E-unsplash.jpg";
-import proj3 from "./assets/images/roberto-nickson-rEJxpBskj3Q-unsplash.jpg";
-import proj4 from "./assets/images/florian-schmidinger-b_79nOqf95I-unsplash.jpg";
-import proj5 from "./assets/images/huy-nguyen-fQgYAnWVFeo-unsplash.jpg";
-import proj6 from "./assets/images/roberto-nickson-rEJxpBskj3Q-unsplash.jpg";
-import paintImg from "./assets/images/paint.jpg";
+import { SectionTitle } from "./components/SectionTitle";
+import heroImage from "./assets/images/build-craft-interiors-T3IG80KOLYQ-unsplash.webp";
+import heroImage2 from "./assets/images/kam-idris-U39FPHKfDu0-unsplash.webp";
+import proj1 from "./assets/images/BedFit.webp";
+import proj2 from "./assets/images/kam-idris-hYb7kbu4x7E-unsplash.webp";
+import proj3 from "./assets/images/roberto-nickson-rEJxpBskj3Q-unsplash.webp";
+import proj4 from "./assets/images/florian-schmidinger-b_79nOqf95I-unsplash.webp";
+import proj5 from "./assets/images/huy-nguyen-fQgYAnWVFeo-unsplash.webp";
+import proj6 from "./assets/images/kam-idris-vqMQN9zImG4-unsplash.webp";
+import bucket1 from "./assets/images/orange.webp";
+import bucket2 from "./assets/images/green.webp";
+import bucket3 from "./assets/images/brown.webp";
+import bucket4 from "./assets/images/blue.webp";
 import logo from "./assets/images/logo.png";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import { PaintPage } from "./pages/PaintPage";
-import { ProjectsPage } from "./pages/ProjectsPage";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useForm } from "@formspree/react";
+
+const PaintPage = lazy(() =>
+  import("./pages/PaintPage").then((m) => ({ default: m.PaintPage })),
+);
+
+const ProjectsPage = lazy(() =>
+  import("./pages/ProjectsPage").then((m) => ({ default: m.ProjectsPage })),
+);
 
 const heroImages = [heroImage, heroImage2];
 const projectImages = [proj1, proj2, proj3, proj4, proj5, proj6];
 const loopingProjectImages = [...projectImages, ...projectImages];
+const paintBuckets = [
+  { img: bucket1, name: "Eggshell" },
+  { img: bucket2, name: "Emulsion" },
+  { img: bucket3, name: "Matt" },
+  { img: bucket4, name: "Satin" },
+];
+
+function CursorGlow() {
+  const glowRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) return;
+
+    function moveGlow(e: MouseEvent) {
+      if (!glowRef.current) return;
+
+      glowRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+    }
+
+    window.addEventListener("mousemove", moveGlow);
+
+    return () => window.removeEventListener("mousemove", moveGlow);
+  }, []);
+
+  return <div ref={glowRef} className="cursor-glow" />;
+}
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
     if (!hash) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo(0, 0);
     }
   }, [pathname, hash]);
 
   return null;
 }
-
 function HomePage() {
   const location = useLocation();
   const navigate = useNavigate();
   const [state, handleSubmit] = useForm("xqejayjr");
 
   const [heroIndex, setHeroIndex] = useState(0);
+
+  const paintSectionRef = useRef<HTMLElement | null>(null);
+  const [paintVisible, setPaintVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setPaintVisible(true);
+        }
+      },
+      { threshold: 0.35 },
+    );
+
+    if (paintSectionRef.current) {
+      observer.observe(paintSectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -48,18 +107,19 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (location.hash) {
-      const id = location.hash.replace("#", "");
-      const el = document.getElementById(id);
+    const state = location.state as { scrollTo?: string } | null;
 
-      if (el) {
-        setTimeout(() => {
-          el.scrollIntoView({ behavior: "smooth" });
-        }, 100);
-      }
+    if (!state?.scrollTo) return;
+
+    const el = document.getElementById(state.scrollTo);
+
+    if (el) {
+      setTimeout(() => {
+        el.scrollIntoView({ behavior: "smooth" });
+        window.history.replaceState({}, document.title, "/");
+      }, 120);
     }
-  }, [location]);
-
+  }, [location.state]);
   return (
     <main>
       {/* HERO */}
@@ -114,9 +174,9 @@ function HomePage() {
                       .getElementById("projects")
                       ?.scrollIntoView({ behavior: "smooth" })
                   }
-                  className="px-5 py-3 border border-white/60 text-white hover:border-[#C9A45C] hover:text-[#C9A45C] transition w-full sm:w-auto text-center"
+                  className="premium-button px-5 py-3 uppercase tracking-widest text-xs w-full sm:w-auto justify-center"
                 >
-                  View Work
+                  View Work →
                 </button>
 
                 <button
@@ -125,9 +185,9 @@ function HomePage() {
                       .getElementById("contact")
                       ?.scrollIntoView({ behavior: "smooth" })
                   }
-                  className="px-5 py-3 bg-[#C9A45C] text-black hover:bg-[#b89145] transition shadow-lg w-full sm:w-auto text-center"
+                  className="premium-button px-5 py-3 uppercase tracking-widest text-xs w-full sm:w-auto justify-center"
                 >
-                  Start a Project
+                  Start Project →
                 </button>
               </div>
             </div>
@@ -142,18 +202,14 @@ function HomePage() {
       >
         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_30%_20%,rgba(201,164,92,0.12),transparent_60%)]" />
 
-        <div className="max-w-2xl mb-16 md:mb-20 relative z-10">
-          <p className="text-xs uppercase tracking-[0.3em] text-[#C9A45C] mb-4">
-            Selected Work
-          </p>
-
-          <h2 className="text-4xl md:text-5xl font-light mb-6">Projects</h2>
-
-          <p className="text-white/70 leading-relaxed">
-            A curated selection of interiors, finishes, and material-driven
-            spaces where light, texture, and craftsmanship define each
-            environment.
-          </p>
+        <div className="relative z-10 mb-16 md:mb-20">
+          <SectionTitle
+            number="01"
+            label="Selected Work"
+            title="Projects"
+            accent="crafted with detail."
+            desc="A curated selection of interiors, finishes, and material-driven spaces where light, texture, and craftsmanship define each environment."
+          />
         </div>
 
         <div className="relative w-full overflow-hidden">
@@ -164,11 +220,12 @@ function HomePage() {
             {loopingProjectImages.map((img, i) => (
               <div
                 key={i}
-                className="shrink-0 w-[260px] md:w-[340px] aspect-[4/5] overflow-hidden rounded-sm relative group bg-neutral-900"
+                className="premium-card shrink-0 w-[260px] md:w-[340px] aspect-[4/5] overflow-hidden rounded-sm relative group bg-neutral-900"
               >
                 <img
                   src={img}
                   alt="Interior project"
+                  loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
                 />
 
@@ -195,6 +252,7 @@ function HomePage() {
 
       {/* PAINT */}
       <section
+        ref={paintSectionRef}
         id="paint"
         className="relative px-6 md:px-12 py-24 md:py-36 bg-[#F6F1EA] overflow-hidden"
       >
@@ -202,49 +260,77 @@ function HomePage() {
 
         <Reveal>
           <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div className="relative group">
-              <div className="aspect-[4/5] overflow-hidden rounded-sm">
-                <img
-                  src={paintImg}
-                  alt="Paint collection"
-                  className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
-                />
-              </div>
+            <div className="relative min-h-[420px] md:min-h-[560px] overflow-hidden">
+              <div className="absolute inset-0 rounded-full bg-[#C9A45C]/10 blur-3xl" />
 
-              <div className="absolute bottom-6 left-6 bg-black/80 text-[#C9A45C] backdrop-blur px-4 py-2 text-xs tracking-widest uppercase">
-                Premium Paints
+              <div className="relative h-[430px] md:h-[560px] flex items-center justify-center overflow-visible">
+                {paintBuckets.map((bucket, index) => (
+                  <div
+                    key={bucket.name}
+                    className={`absolute paint-bucket-stack ${
+                      paintVisible ? "paint-bucket-stack-in" : ""
+                    }`}
+                    style={
+                      {
+                        "--bucket-x": `${index * 46 - 70}px`,
+                        "--bucket-rotate": `${index * 1.8 - 3}deg`,
+                        animationDelay: `${700 + index * 260}ms`,
+                        
+                        zIndex: 10 + index,
+                      } as React.CSSProperties
+                    }
+                  >
+                    <img
+                      src={bucket.img}
+                      alt={`${bucket.name} paint bucket`}
+                      loading="lazy"
+                      className="w-[215px] md:w-[300px] h-auto object-contain drop-shadow-[0_35px_50px_rgba(0,0,0,0.42)] transition duration-700 hover:scale-105"
+                    />
+                  </div>
+                ))}
               </div>
             </div>
 
             <div className="max-w-xl">
-              <p className="text-xs uppercase tracking-[0.3em] text-[#8A6A2F] mb-4">
-                Paint Line
-              </p>
+              <div
+                className={`patreon-brand ${paintVisible ? "patreon-brand-in" : ""}`}
+              >
+                <p className="text-[10px] uppercase tracking-[0.45em] text-[#8A6A2F]/70 mb-4">
+                  Paint Line
+                </p>
 
-              <h2 className="text-4xl md:text-5xl font-light mb-6 leading-tight text-black">
-                Premium Paint,
-                <span className="block italic text-[#8A6A2F]">
-                  made for refined spaces.
-                </span>
-              </h2>
+                <h2 className="text-5xl md:text-7xl font-light tracking-[0.18em] uppercase text-black leading-none">
+                  Patreon
+                  <span className="block text-[#8A6A2F]">Paint</span>
+                </h2>
 
-              <p className="text-neutral-700 leading-relaxed mb-8">
-                Our paint line is created to support beautiful interiors with
-                rich color, smooth finishing, and long-lasting elegance for
-                homes and commercial spaces.
-              </p>
+                <div className="mt-6 h-px w-32 bg-[#8A6A2F]/40" />
+
+                <p className="mt-6 text-2xl md:text-3xl font-light text-black">
+                  Coat Once,
+                  <span className="italic text-[#8A6A2F]"> Stains Twice.</span>
+                </p>
+
+                <p className="mt-6 text-neutral-700 leading-relaxed">
+                  A distinct paint brand created for smooth coverage, rich
+                  colour, and refined finishes for interior and exterior spaces.
+                </p>
+              </div>
 
               <div className="space-y-3 text-sm text-neutral-700">
-                <p>• Elegant color finishes</p>
+                <p>• Coat Once, Stains Twice</p>
                 <p>• Smooth and lasting application</p>
-                <p>• Designed for modern interiors</p>
+                <p>• Interior and exterior paint options</p>
               </div>
 
               <button
                 onClick={() => navigate("/paint")}
-                className="mt-10 px-6 py-3 border border-black text-black hover:bg-black hover:text-[#C9A45C] transition"
+                className="premium-button mt-10 px-6 py-3 uppercase tracking-widest text-xs"
               >
                 Explore Paint Line
+                <span className="premium-button-arrow transition-transform duration-500">
+                  →
+                </span>
               </button>
             </div>
           </div>
@@ -264,34 +350,46 @@ function HomePage() {
         <Reveal>
           <div className="grid md:grid-cols-2 gap-20 items-center relative z-10">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-[#8A6A2F] mb-6">
-                The Studio
-              </p>
-
-              <h2 className="text-4xl md:text-5xl font-light leading-tight mb-8 text-black">
-                Built on beauty,
-                <span className="block italic text-[#8A6A2F]">
-                  refined through detail.
-                </span>
-              </h2>
-
-              <p className="text-neutral-600 leading-relaxed mb-6">
-                Sapphire & Beryl creates beautiful and functional spaces through
-                interior design, home finishing, and premium paint solutions.
-                Every project is guided by detail, elegance, and lasting
-                quality.
-              </p>
+              <SectionTitle
+                number="03"
+                label="The Studio"
+                title="Built on beauty,"
+                accent="refined through detail."
+                desc="Sapphire & Beryl creates beautiful and functional spaces through interior design, home finishing, and premium paint solutions. Every project is guided by detail, elegance, and lasting quality."
+                dark={false}
+              />
 
               <p className="text-neutral-500 leading-relaxed">
                 From concept to final finish, every detail is intentional.
               </p>
+
+              <div className="mt-10 grid grid-cols-3 gap-3">
+                {[
+                  ["15+", "Projects"],
+                  ["100%", "Detail"],
+                  ["Premium", "Finish"],
+                ].map(([value, label]) => (
+                  <div
+                    key={label}
+                    className="border border-[#8A6A2F]/20 bg-black/[0.03] px-4 py-5 text-center"
+                  >
+                    <p className="text-xl md:text-2xl font-light text-[#8A6A2F]">
+                      {value}
+                    </p>
+                    <p className="mt-2 text-[10px] uppercase tracking-[0.25em] text-neutral-500">
+                      {label}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="relative h-[420px] md:h-[500px]">
               <div className="absolute top-0 left-0 w-3/4 h-3/4 bg-neutral-200 overflow-hidden group">
                 <img
-                  src={proj5}
+                  src={proj6}
                   alt="Interior studio process"
+                  loading="lazy"
                   className="w-full h-full object-cover transition duration-[1200ms] group-hover:scale-110"
                 />
               </div>
@@ -300,6 +398,7 @@ function HomePage() {
                 <img
                   src={proj1}
                   alt="Interior finishing detail"
+                  loading="lazy"
                   className="w-full h-full object-cover transition duration-[1200ms] group-hover:scale-110"
                 />
               </div>
@@ -320,26 +419,28 @@ function HomePage() {
         <Reveal>
           <div className="grid md:grid-cols-2 gap-20">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-[#C9A45C] mb-6">
-                Start a Project
-              </p>
+              <SectionTitle
+                number="04"
+                label="Start a Project"
+                title="Let’s create something"
+                accent="worth experiencing."
+                desc="Tell us about your space, your vision, or even just a rough idea. We’ll guide you through design, finishing, paint choices, and the full process."
+              />
 
-              <h2 className="text-4xl md:text-5xl font-light leading-tight mb-8">
-                Let’s create something
-                <span className="block italic text-[#C9A45C]">
-                  worth experiencing.
-                </span>
-              </h2>
+              <div className="mt-10 grid gap-4 text-sm">
+                <div className="border border-[#C9A45C]/20 bg-white/[0.03] p-5">
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A45C] mb-3">
+                    Email
+                  </p>
+                  <p className="text-white/70">sapphireberyl12@gmail.com</p>
+                </div>
 
-              <p className="text-white/70 max-w-md mb-10">
-                Tell us about your space, your vision, or even just a rough
-                idea. We’ll guide you through design, finishing, paint choices,
-                and the full process.
-              </p>
-
-              <div className="space-y-4 text-sm text-white/60">
-                <p>sapphireberyl12@gmail.com</p>
-                <p>+2348039443920</p>
+                <div className="border border-[#C9A45C]/20 bg-white/[0.03] p-5">
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A45C] mb-3">
+                    WhatsApp
+                  </p>
+                  <p className="text-white/70">+2348039443920</p>
+                </div>
               </div>
             </div>
 
@@ -371,7 +472,7 @@ function HomePage() {
               <button
                 type="submit"
                 disabled={state.submitting}
-                className="mt-6 px-6 py-3 bg-[#C9A45C] text-black hover:bg-[#b89145] transition disabled:opacity-60"
+                className="premium-button mt-6 px-6 py-3 uppercase tracking-widest text-xs disabled:opacity-60"
               >
                 {state.submitting ? "Sending..." : "Send Inquiry"}
               </button>
@@ -386,19 +487,24 @@ function HomePage() {
         </Reveal>
       </section>
 
-      {/* WHATSAPP BUTTON */}
-      <a
-        href="https://wa.me/2348039443920"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 group"
-      >
-        <div className="w-14 h-14 rounded-full bg-[#C9A45C] flex items-center justify-center shadow-lg hover:scale-110 transition">
-          <svg viewBox="0 0 32 32" className="w-6 h-6 fill-black transition">
-            <path d="M16 .396C7.163.396 0 7.56 0 16.396c0 2.887.754 5.706 2.188 8.19L0 32l7.61-2.145a15.93 15.93 0 008.39 2.293c8.837 0 16-7.163 16-16S24.837.396 16 .396zm0 29.187c-2.53 0-5.01-.68-7.17-1.97l-.51-.303-4.52 1.273 1.21-4.4-.33-.52a13.58 13.58 0 01-2.1-7.27c0-7.49 6.1-13.59 13.59-13.59 3.63 0 7.04 1.41 9.6 3.97a13.48 13.48 0 013.98 9.6c0 7.49-6.1 13.59-13.59 13.59zm7.45-10.13c-.41-.2-2.43-1.2-2.81-1.33-.38-.14-.66-.2-.94.2-.28.41-1.08 1.33-1.32 1.6-.24.27-.48.3-.9.1-.41-.2-1.73-.64-3.3-2.03-1.22-1.08-2.05-2.41-2.29-2.82-.24-.41-.03-.63.18-.83.19-.18.41-.48.62-.72.21-.24.28-.41.42-.68.14-.27.07-.51-.03-.72-.1-.2-.94-2.27-1.29-3.1-.34-.82-.68-.71-.94-.72-.24-.01-.51-.01-.78-.01-.27 0-.72.1-1.1.51-.38.41-1.45 1.42-1.45 3.46s1.49 4.01 1.7 4.28c.21.27 2.94 4.49 7.13 6.29.99.43 1.76.69 2.36.88.99.31 1.89.27 2.6.17.79-.12 2.43-.99 2.78-1.95.34-.96.34-1.78.24-1.95-.1-.17-.38-.27-.79-.48z" />
-          </svg>
+      {/* FOOTER */}
+      <footer className="px-6 md:px-12 py-12 bg-black border-t border-[#C9A45C]/15 text-white">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+          <div>
+            <p className="text-[#C9A45C] uppercase tracking-[0.35em] text-sm">
+              Sapphire & Beryl
+            </p>
+            <p className="mt-4 text-white/50 text-sm max-w-md">
+              Interior design, home finishing, and Patreon Paint solutions for
+              refined spaces.
+            </p>
+          </div>
+
+          <div className="text-white/40 text-xs uppercase tracking-[0.25em]">
+            © 2026 • Lagos, Nigeria
+          </div>
         </div>
-      </a>
+      </footer>
     </main>
   );
 }
@@ -406,14 +512,39 @@ function HomePage() {
 export default function App() {
   return (
     <>
+      <CursorGlow />
       <SiteHeader />
       <ScrollToTop />
 
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/paint" element={<PaintPage />} />
-        <Route path="/projects" element={<ProjectsPage />} />
-      </Routes>
+      {/* WHATSAPP BUTTON */}
+      <a
+        href="https://wa.me/2348039443920"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="whatsapp-float fixed bottom-6 right-6 z-[999] group"
+      >
+        <div className="w-14 h-14 rounded-full bg-[#C9A45C] flex items-center justify-center shadow-lg hover:scale-110 transition">
+          <svg viewBox="0 0 32 32" className="w-6 h-6 fill-black transition">
+            <path d="M16 .396C7.163.396 0 7.56 0 16.396c0 2.887.754 5.706 2.188 8.19L0 32l7.61-2.145a15.93 15.93 0 008.39 2.293c8.837 0 16-7.163 16-16S24.837.396 16 .396zm0 29.187c-2.53 0-5.01-.68-7.17-1.97l-.51-.303-4.52 1.273 1.21-4.4-.33-.52a13.58 13.58 0 01-2.1-7.27c0-7.49 6.1-13.59 13.59-13.59 3.63 0 7.04 1.41 9.6 3.97a13.48 13.48 0 013.98 9.6c0 7.49-6.1 13.59-13.59 13.59zm7.45-10.13c-.41-.2-2.43-1.2-2.81-1.33-.38-.14-.66-.2-.94.2-.28.41-1.08 1.33-1.32 1.6-.24.27-.48.3-.9.1-.41-.2-1.73-.64-3.3-2.03-1.22-1.08-2.05-2.41-2.29-2.82-.24-.41-.03-.63.18-.83.19-.18.41-.48.62-.72.21-.24.28-.41.42-.68.14-.27.07-.51-.03-.72-.1-.2-.94-2.27-1.29-3.1-.34-.82-.68-.71-.94-.72-.24-.01-.51-.01-.78-.01-.27 0-.72.1-1.1.51-.38.41-1.45 1.42-1.45 3.46s1.49 4.01 1.7 4.28c.21.27 2.94 4.49 7.13 6.29.99.43 1.76.69 2.36.88.99.31 1.89.27 2.6.17.79-.12 2.43-.99 2.78-1.95.34-.96.34-1.78.24-1.95-.1-.17-.38-.27-.79-.48z" />
+          </svg>
+        </div>
+      </a>
+
+      <div className="page-transition">
+        <Suspense
+          fallback={
+            <div className="min-h-screen bg-black text-[#C9A45C] flex items-center justify-center text-xs uppercase tracking-[0.35em]">
+              Sapphire & Beryl
+            </div>
+          }
+        >
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/paint" element={<PaintPage />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+          </Routes>
+        </Suspense>
+      </div>
     </>
   );
 }

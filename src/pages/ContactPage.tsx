@@ -66,22 +66,41 @@ export function ContactPage() {
           </button>
         </form>
 
-        <div className="text-white/60 space-y-5 text-sm leading-relaxed">
-          <p>
-            We work on interior design, home finishing, and premium paint
-            solutions.
-          </p>
+        <div className="grid gap-5">
+          <div className="border border-[#C9A45C]/20 bg-white/[0.02] backdrop-blur-sm p-6 transition duration-500 hover:border-[#C9A45C]/50 hover:bg-white/[0.04]">
+            <p className="text-[10px] uppercase tracking-[0.35em] text-[#C9A45C] mb-4">
+              Email
+            </p>
 
-          <div className="pt-6">
-            <p className="font-medium text-[#C9A45C]">Email</p>
-            <p>sapphireberyl12@gmail.com</p>
+            <div className="h-px w-12 bg-[#C9A45C]/40 mb-4" />
+
+            <p className="text-white/70">sapphireberyl12@gmail.com</p>
           </div>
 
-          <div>
-            <p className="font-medium text-[#C9A45C]">Services</p>
-            <p>Interior Design</p>
-            <p>Home Finishing</p>
-            <p>Paint Line</p>
+          <div className="border border-[#C9A45C]/20 bg-white/[0.02] backdrop-blur-sm p-6 transition duration-500 hover:border-[#C9A45C]/50 hover:bg-white/[0.04]">
+            <p className="text-[10px] uppercase tracking-[0.35em] text-[#C9A45C] mb-4">
+              Services
+            </p>
+
+            <div className="h-px w-12 bg-[#C9A45C]/40 mb-4" />
+
+            <div className="space-y-2 text-white/70">
+              <p>Interior Design</p>
+              <p>Home Finishing</p>
+              <p>Paint Line</p>
+            </div>
+          </div>
+
+          <div className="border border-[#C9A45C]/20 bg-white/[0.02] backdrop-blur-sm p-6 transition duration-500 hover:border-[#C9A45C]/50 hover:bg-white/[0.04]">
+            <p className="text-[10px] uppercase tracking-[0.35em] text-[#C9A45C] mb-4">
+              Response Time
+            </p>
+
+            <div className="h-px w-12 bg-[#C9A45C]/40 mb-4" />
+
+            <p className="text-white/70">
+              We typically respond within 24 hours to project enquiries.
+            </p>
           </div>
         </div>
       </div>
