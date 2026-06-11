@@ -374,7 +374,7 @@ export function ProjectsPage() {
                   loop
                   playsInline
                   preload="metadata"
-                  className="absolute inset-0 w-full h-full object-cover transition duration-[1200ms] group-hover:scale-105"
+                  className="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-105"
                 />
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -414,7 +414,7 @@ export function ProjectsPage() {
               autoPlay
               playsInline
               preload="metadata"
-              className="w-full h-auto max-h-[70vh] bg-black object-contain rounded-sm"
+              className="w-full h-auto max-h-[75vh] bg-black object-contain rounded-sm"
             />
 
             <div className="mt-4 w-full text-white">

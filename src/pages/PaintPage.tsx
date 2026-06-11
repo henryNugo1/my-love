@@ -137,12 +137,13 @@ export function PaintPage() {
                       : "opacity-0 translate-x-24"
                   }`}
                   style={{
-                    animationDelay: `${Math.floor(index / 2) * 350}ms`,
+                    animationDelay: `${index * 180}ms`
                   }}
                 >
                   <img
                     src={bucket.img}
                     alt={`${bucket.name} paint bucket`}
+                    loading="lazy"
                     className="w-full max-w-[170px] md:max-w-[220px] object-contain drop-shadow-[0_25px_35px_rgba(0,0,0,0.35)] transition duration-700 group-hover:scale-105"
                   />
 
@@ -178,12 +179,13 @@ export function PaintPage() {
             {textures.map((t, i) => (
               <div
                 key={i}
-                className="premium-card group relative overflow-hidden rounded-sm cursor-pointer bg-black shadow-sm transition duration-700 hover:-translate-y-2 hover:scale-[1.01]"
+                className="premium-card group relative overflow-hidden rounded-sm cursor-pointer bg-black shadow-sm transition duration-700 hover:-translate-y-2 hover:scale-[1.03]"
               >
                 <div className="aspect-square overflow-hidden">
                   <img
                     src={t.img}
                     alt={t.name}
+                    loading="lazy"
                     className="w-full h-full object-cover transition duration-[1200ms] group-hover:scale-110"
                   />
                 </div>
@@ -255,7 +257,7 @@ export function PaintPage() {
                     loop
                     playsInline
                     preload="metadata"
-                    className="absolute inset-0 w-full h-full object-contain bg-black transition duration-[1200ms] group-hover:scale-[1.03]"
+                    className="absolute inset-0 w-full h-full object-contain bg-black transition duration-[1200ms] group-hover:scale-[1.06]"
                   />
 
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition duration-500" />
@@ -295,7 +297,7 @@ export function PaintPage() {
               autoPlay
               playsInline
               preload="metadata"
-              className="w-full h-auto max-h-[70vh] bg-black object-contain rounded-sm"
+              className="w-full h-auto max-h-[75vh] bg-black object-contain rounded-sm"
             />
 
             <div className="mt-4 w-full flex items-center justify-between gap-4 text-white">
