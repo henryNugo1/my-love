@@ -1,22 +1,24 @@
 import { SiteHeader } from "./components/SiteHeader";
 import { Reveal } from "./components/Reveal";
 import { SectionTitle } from "./components/SectionTitle";
-import heroImage from "./assets/images/build-craft-interiors-T3IG80KOLYQ-unsplash.webp";
-import heroImage2 from "./assets/images/kam-idris-U39FPHKfDu0-unsplash.webp";
-import proj1 from "./assets/images/BedFit.webp";
-import proj2 from "./assets/images/kam-idris-hYb7kbu4x7E-unsplash.webp";
-import proj3 from "./assets/images/roberto-nickson-rEJxpBskj3Q-unsplash.webp";
-import proj4 from "./assets/images/florian-schmidinger-b_79nOqf95I-unsplash.webp";
-import proj5 from "./assets/images/huy-nguyen-fQgYAnWVFeo-unsplash.webp";
-import proj6 from "./assets/images/kam-idris-vqMQN9zImG4-unsplash.webp";
-import bucket1 from "./assets/images/orange.webp";
-import bucket2 from "./assets/images/green.webp";
-import bucket3 from "./assets/images/brown.webp";
-import bucket4 from "./assets/images/blue.webp";
-import logo from "./assets/images/logo.png";
+import { cloudinaryImage } from "./lib/cloudinary";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useForm } from "@formspree/react";
+
+const heroImage = cloudinaryImage("build-craft-interiors-T3IG80KOLYQ-unsplash_ur1lxp", "webp");
+const heroImage2 = cloudinaryImage("kam-idris-U39FPHKfDu0-unsplash_jca2cx", "webp");
+const proj1 = cloudinaryImage("BedFit_udrh5w", "webp");
+const proj2 = cloudinaryImage("kam-idris-hYb7kbu4x7E-unsplash_tehr5s", "webp");
+const proj3 = cloudinaryImage("roberto-nickson-rEJxpBskj3Q-unsplash_nqop0g", "webp");
+const proj4 = cloudinaryImage("florian-schmidinger-b_79nOqf95I-unsplash_er962v", "webp");
+const proj5 = cloudinaryImage("huy-nguyen-fQgYAnWVFeo-unsplash_mus3rx", "webp");
+const proj6 = cloudinaryImage("kam-idris-vqMQN9zImG4-unsplash_hdcg4x", "webp");
+const bucket1 = cloudinaryImage("orange_cpu0eh", "webp");
+const bucket2 = cloudinaryImage("green_c1yg7l", "webp");
+const bucket3 = cloudinaryImage("brown_p0hggc", "webp");
+const bucket4 = cloudinaryImage("blue_utf1q2", "webp");
+const logo = cloudinaryImage("logo_qql4lj", "png");
 
 const PaintPage = lazy(() =>
   import("./pages/PaintPage").then((m) => ({ default: m.PaintPage })),

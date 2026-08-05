@@ -1,22 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import { Reveal } from "../components/Reveal";
-import bucket1 from "../assets/images/orange.webp";
-import bucket2 from "../assets/images/green.webp";
-import bucket3 from "../assets/images/brown.webp";
-import bucket4 from "../assets/images/blue.webp";
+import { ViewportVideo } from "../components/ViewportVideo";
+import { cloudinaryImage, cloudinaryVideo } from "../lib/cloudinary";
 
-import texture1 from "../assets/images/black.jpg";
-import texture2 from "../assets/images/Blue.jpg";
-import texture3 from "../assets/images/Brown.jpg";
-import texture4 from "../assets/images/Cream.jpg";
-import texture5 from "../assets/images/wood.jpg";
-import texture6 from "../assets/images/wood patern.jpg";
-
-import paint1 from "../assets/videos/paint-1.mp4";
-import paint2 from "../assets/videos/paint-2.mp4";
-import paint3 from "../assets/videos/paint-3.mp4";
-import paint4 from "../assets/videos/paint-4.mp4";
-import paint5 from "../assets/videos/paint-5.mp4";
+const bucket1 = cloudinaryImage("orange_cpu0eh", "webp");
+const bucket2 = cloudinaryImage("green_c1yg7l", "webp");
+const bucket3 = cloudinaryImage("brown_p0hggc", "webp");
+const bucket4 = cloudinaryImage("blue_utf1q2", "webp");
+const texture1 = cloudinaryImage("black_faihql", "jpg");
+const texture2 = cloudinaryImage("Blue_yqwkuk", "jpg");
+const texture3 = cloudinaryImage("Brown_pjt8ii", "jpg");
+const texture4 = cloudinaryImage("Cream_pidnrn", "jpg");
+const texture5 = cloudinaryImage("wood_n8rj9m", "jpg");
+const texture6 = cloudinaryImage("wood_patern_ohahus", "jpg");
+const paint1 = cloudinaryVideo("paint-1_egtets");
+const paint2 = cloudinaryVideo("paint-2_w2gsk7");
+const paint3 = cloudinaryVideo("paint-3_se669i");
+const paint4 = cloudinaryVideo("paint-4_obfjok");
+const paint5 = cloudinaryVideo("paint-5_orglbv");
 
 export function PaintPage() {
   const bucketSectionRef = useRef<HTMLElement | null>(null);
@@ -250,13 +251,8 @@ export function PaintPage() {
                 className="group text-left w-full"
               >
                 <div className="relative aspect-[9/16] overflow-hidden rounded-sm bg-neutral-950">
-                  <video
+                  <ViewportVideo
                     src={project.src}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
                     className="absolute inset-0 w-full h-full object-contain bg-black transition duration-[1200ms] group-hover:scale-[1.06]"
                   />
 

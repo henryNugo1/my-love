@@ -1,22 +1,21 @@
 import { useEffect, useState } from "react";
 import { Reveal } from "../components/Reveal";
+import { ViewportVideo } from "../components/ViewportVideo";
+import { cloudinaryVideo } from "../lib/cloudinary";
 
-// Existing motion videos — leave these as they are
-import vid1 from "../assets/videos/ha3.mp4";
-import vid2 from "../assets/videos/ta1.mp4";
-import vid3 from "../assets/videos/ta2.mp4";
-
-// Real project videos — replace these file paths when you add your real videos
-import projectVid1 from "../assets/videos/The Noir Suite.mp4";
-import projectVid2 from "../assets/videos/The Garden Retreat.mp4";
-import projectVid3 from "../assets/videos/The Grand Living Space.mp4";
-import projectVid4 from "../assets/videos/The Modern Haven.mp4";
-import projectVid5 from "../assets/videos/The Future Kitchen.mp4";
-import projectVid6 from "../assets/videos/The Calm Retreat.mp4";
-import projectVid7 from "../assets/videos/The Creative Lounge.mp4";
-import bedFitVid1 from "../assets/videos/bed-fitting-1.mp4";
-import bedFitVid2 from "../assets/videos/bed-fitting-2.mp4";
-import bedFitVid3 from "../assets/videos/bed-fitting-3.mp4";
+const vid1 = cloudinaryVideo("ha3_dkdsz7");
+const vid2 = cloudinaryVideo("ta1_idwm5a");
+const vid3 = cloudinaryVideo("ta2_ygeqzx");
+const projectVid1 = cloudinaryVideo("The_Noir_Suite_jiqqsd");
+const projectVid2 = cloudinaryVideo("The_Garden_Retreat_bj8woy");
+const projectVid3 = cloudinaryVideo("The_Grand_Living_Space_amqbdy");
+const projectVid4 = cloudinaryVideo("The_Modern_Haven_ymrs2g");
+const projectVid5 = cloudinaryVideo("The_Future_Kitchen_os53nt");
+const projectVid6 = cloudinaryVideo("The_Calm_Retreat_dyvfbn");
+const projectVid7 = cloudinaryVideo("The_Creative_Lounge_msyw4v");
+const bedFitVid1 = cloudinaryVideo("bed-fitting-1_vaocgo");
+const bedFitVid2 = cloudinaryVideo("bed-fitting-2_xxtecn");
+const bedFitVid3 = cloudinaryVideo("bed-fitting-3_wbkptu");
 type ProjectItem = {
   src: string;
   label: string;
@@ -221,13 +220,8 @@ export function ProjectsPage() {
                       : ""
                   }`}
                 >
-                  <video
+                  <ViewportVideo
                     src={v.src}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
                     className="absolute inset-0 w-full h-full object-cover transition duration-[1200ms] ease-out group-hover:scale-105"
                   />
 
@@ -289,13 +283,8 @@ export function ProjectsPage() {
                   onClick={() => setSelectedProject(project)}
                   className="relative aspect-[4/5] max-w-[320px] overflow-hidden rounded-sm bg-black group cursor-pointer"
                 >
-                  <video
+                  <ViewportVideo
                     src={project.src}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
                     className="absolute inset-0 w-full h-full object-cover transition duration-[1200ms] group-hover:scale-105"
                   />
 
@@ -367,13 +356,8 @@ export function ProjectsPage() {
                 onClick={() => setSelectedProject(project)}
                 className="relative aspect-[4/5] overflow-hidden rounded-sm bg-neutral-900 group cursor-pointer border border-white/10 hover:border-[#C9A45C]/40 transition duration-500"
               >
-                <video
+                <ViewportVideo
                   src={project.src}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
                   className="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-105"
                 />
 
