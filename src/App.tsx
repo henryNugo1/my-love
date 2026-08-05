@@ -38,6 +38,31 @@ const paintBuckets = [
   { img: bucket4, name: "Satin" },
 ];
 
+const studioStrengths = [
+  {
+    number: "01",
+    title: "Thoughtful Design",
+    text: "Every choice is shaped around your space, taste, and how you want to live in it.",
+  },
+  {
+    number: "02",
+    title: "Refined Finishing",
+    text: "Materials, colour, alignment, and final details are considered as one complete experience.",
+  },
+  {
+    number: "03",
+    title: "One Clear Process",
+    text: "Design, finishing, fittings, and paint guidance stay connected from the first idea to handover.",
+  },
+];
+
+const studioProcess = [
+  ["01", "Consultation", "We learn about your space, priorities, style, and budget."],
+  ["02", "Creative Direction", "We shape the concept, palette, materials, and practical plan."],
+  ["03", "Execution", "The approved direction is brought to life with careful coordination."],
+  ["04", "Final Handover", "We review the finished work and make sure every detail feels complete."],
+];
+
 function CursorGlow() {
   const glowRef = useRef<HTMLDivElement | null>(null);
 
@@ -339,6 +364,84 @@ function HomePage() {
         </Reveal>
       </section>
 
+      {/* WHY CHOOSE US & PROCESS */}
+      <section className="relative overflow-hidden bg-[#11100E] px-6 py-24 text-white md:px-12 md:py-36">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_15%,rgba(201,164,92,0.13),transparent_45%)]" />
+
+        <div className="relative z-10 mx-auto max-w-7xl">
+          <Reveal>
+            <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-20">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.4em] text-[#C9A45C]">
+                  Why Choose Us
+                </p>
+                <h2 className="mt-5 text-4xl font-light leading-tight md:text-6xl">
+                  A considered approach,
+                  <span className="block italic text-[#C9A45C]">
+                    from idea to finish.
+                  </span>
+                </h2>
+              </div>
+
+              <div className="grid gap-px bg-white/10 md:grid-cols-3">
+                {studioStrengths.map((item) => (
+                  <article
+                    key={item.number}
+                    className="group bg-[#11100E] p-7 transition duration-500 hover:bg-white/[0.04] md:p-8"
+                  >
+                    <p className="text-xs tracking-[0.25em] text-[#C9A45C]">
+                      {item.number}
+                    </p>
+                    <h3 className="mt-8 text-xl font-light">{item.title}</h3>
+                    <p className="mt-4 text-sm leading-7 text-white/55">
+                      {item.text}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal>
+            <div className="mt-24 border-t border-[#C9A45C]/20 pt-16 md:mt-32 md:pt-20">
+              <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.4em] text-[#C9A45C]">
+                    How We Work
+                  </p>
+                  <h2 className="mt-5 text-3xl font-light md:text-5xl">
+                    Four steps. One clear journey.
+                  </h2>
+                </div>
+
+                <button
+                  onClick={() =>
+                    document
+                      .getElementById("contact")
+                      ?.scrollIntoView({ behavior: "smooth" })
+                  }
+                  className="premium-button w-fit px-6 py-3 text-xs uppercase tracking-widest"
+                >
+                  Start Your Project →
+                </button>
+              </div>
+
+              <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                {studioProcess.map(([number, title, text]) => (
+                  <article key={number} className="border-l border-white/15 pl-6">
+                    <p className="text-xs tracking-[0.25em] text-[#C9A45C]">
+                      {number}
+                    </p>
+                    <h3 className="mt-5 text-lg font-light">{title}</h3>
+                    <p className="mt-3 text-sm leading-7 text-white/50">{text}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
       {/* ABOUT */}
       <section
         id="about"
@@ -353,7 +456,7 @@ function HomePage() {
           <div className="grid md:grid-cols-2 gap-20 items-center relative z-10">
             <div>
               <SectionTitle
-                number="03"
+                number="04"
                 label="The Studio"
                 title="Built on beauty,"
                 accent="refined through detail."
@@ -422,7 +525,7 @@ function HomePage() {
           <div className="grid md:grid-cols-2 gap-20">
             <div>
               <SectionTitle
-                number="04"
+                number="05"
                 label="Start a Project"
                 title="Let’s create something"
                 accent="worth experiencing."
